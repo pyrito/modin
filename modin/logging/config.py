@@ -25,12 +25,13 @@ import uuid
 import platform
 import psutil
 import pandas
+import pathlib
 import threading
 import time
 from typing import Optional
 
 import modin
-from modin.config import LogMemoryInterval, LogFileSize, LogMode
+from modin.config import LogMemoryInterval, LogFileSize, LogMode, LogPath
 
 __LOGGER_CONFIGURED__: bool = False
 
@@ -117,7 +118,12 @@ def _create_logger(
     Logger
         Logger object configured per Modin settings.
     """
-    log_filename = f".modin/logs/job_{job_id}/{log_name}.log"
+    log_path = LogPath.get()
+    if log_path == "":
+        log_filename = f".modin/logs/job_{job_id}/{log_name}.log"
+    else:
+        log_filename = str(pathlib.Path(log_path) / f"{log_name}.log")
+
     os.makedirs(os.path.dirname(log_filename), exist_ok=True)
 
     logger = logging.getLogger(namespace)
