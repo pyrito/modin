@@ -30,7 +30,11 @@ from modin.config import NPartitions
 from modin.core.io.file_dispatcher import OpenFile
 from modin.core.io.text.csv_dispatcher import CSVDispatcher
 
-_SUPPORTED_PROTOCOLS = {"s3", "S3"}
+# Per discussion in: https://github.com/fsspec/filesystem_spec/issues/1009#issuecomment-1203004749
+# File paths should and are case sensitive and there may be ones in the future that are
+# case sensitive, so for now we should only support ones that we know are valid.
+# http and https not supported here because the behavior isn't correct for glob.
+_SUPPORTED_PROTOCOLS = {"s3", "gs", "ftp"}
 
 
 class CSVGlobDispatcher(CSVDispatcher):
@@ -340,9 +344,6 @@ class CSVGlobDispatcher(CSVDispatcher):
         ):
             return len(glob.glob(file_path)) > 0
 
-        # `file_path` may start with a capital letter, which isn't supported by `fsspec.core.url_to_fs` used below.
-        file_path = file_path[0].lower() + file_path[1:]
-
         from botocore.exceptions import (
             NoCredentialsError,
             EndpointConnectionError,
@@ -388,9 +389,6 @@ class CSVGlobDispatcher(CSVDispatcher):
             relative_paths = glob.glob(file_path)
             abs_paths = [os.path.abspath(path) for path in relative_paths]
             return abs_paths
-
-        # `file_path` may start with a capital letter, which isn't supported by `fsspec.core.url_to_fs` used below.
-        file_path = file_path[0].lower() + file_path[1:]
 
         from botocore.exceptions import (
             NoCredentialsError,
