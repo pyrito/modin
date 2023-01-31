@@ -824,7 +824,11 @@ class DataFrameGroupBy(DataFrameGroupByCompat):
         return com.pipe(self, func, *args, **kwargs)
 
     def cumcount(self, ascending=True):
-        result = self._default_to_pandas(lambda df: df.cumcount(ascending=ascending))
+        result = self._wrap_aggregation(
+            type(self._query_compiler).groupby_cumcount,
+            numeric_only=False,
+            agg_kwargs=dict(ascending=ascending),
+        )
         # pandas does not name the index on cumcount
         result._query_compiler.set_index_name(None)
         return result
