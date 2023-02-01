@@ -831,6 +831,7 @@ class DataFrameGroupBy(DataFrameGroupByCompat):
         )
         if not isinstance(result, Series):
             result = result.squeeze(axis=1)
+            result.name = None
         return result
 
     def tail(self, n=5):
