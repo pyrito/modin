@@ -830,6 +830,7 @@ class DataFrameGroupBy(DataFrameGroupByCompat):
             agg_kwargs=dict(ascending=ascending),
         )
         if not isinstance(result, Series):
+            # The result should always be a Series with name None and type int64
             result = result.squeeze(axis=1)
             result.name = None
         return result
