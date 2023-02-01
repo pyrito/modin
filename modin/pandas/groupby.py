@@ -824,11 +824,14 @@ class DataFrameGroupBy(DataFrameGroupByCompat):
         return com.pipe(self, func, *args, **kwargs)
 
     def cumcount(self, ascending=True):
-        return self._wrap_aggregation(
+        result = self._wrap_aggregation(
             type(self._query_compiler).groupby_cumcount,
             numeric_only=False,
             agg_kwargs=dict(ascending=ascending),
         )
+        if not isinstance(result, Series):
+            result = result.squeeze(axis=1)
+        return result
 
     def tail(self, n=5):
         return self._default_to_pandas(lambda df: df.tail(n))
