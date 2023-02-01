@@ -927,6 +927,8 @@ _GROUPBY_FORWARDING_METHODS = frozenset(
         "shift",
         "prod",
         "var",
+        "first",
+        "last",
     }
 )
 
