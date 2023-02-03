@@ -764,7 +764,7 @@ class DataFrameGroupBy(DataFrameGroupByCompat):
         )
 
     def head(self, n=5):
-        return self._check_index_name(
+        return self._check_index(
             self._wrap_aggregation(
                 type(self._query_compiler).groupby_head, 
                 agg_kwargs=dict(n=n), 
@@ -850,7 +850,7 @@ class DataFrameGroupBy(DataFrameGroupByCompat):
         return result
 
     def tail(self, n=5):
-        return self._check_index_name(
+        return self._check_index(
             self._wrap_aggregation(
                 type(self._query_compiler).groupby_tail, 
                 agg_kwargs=dict(n=n), 
