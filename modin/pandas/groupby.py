@@ -770,7 +770,8 @@ class DataFrameGroupBy(DataFrameGroupByCompat):
         if not isinstance(result, Series):
             # The result should always be a Series with name None and type int64
             result = result.squeeze(axis=1)
-            result.name = None
+        # TODO: this might not hold in the future
+        result.name = None
         return result
 
     def nunique(self, dropna=True):
