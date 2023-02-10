@@ -213,7 +213,9 @@ class ClientQueryCompiler(BaseQueryCompiler):
             self._service.concat(self._id, axis, other, **kwargs)
         )
 
-    def sort_rows_by_column_values(self, columns, ascending=True, handle_duplicates=None, **kwargs):
+    def sort_rows_by_column_values(
+        self, columns, ascending=True, handle_duplicates=None, **kwargs
+    ):
         return self.__constructor__(
             self._service.sort_rows_by_column_values(
                 self._id, columns, ascending=ascending, handle_duplicates=None, **kwargs
@@ -936,6 +938,7 @@ _GROUPBY_FORWARDING_METHODS = frozenset(
         "head",
         "tail",
         "nth",
+        "ngroup",
         "std",
         "sem",
         "rank",
